@@ -1,0 +1,53 @@
+<body>
+
+
+    <section class="section1">
+        <!-- LEFT COLUMN -->
+
+        <div class="col">
+            <h2>Pastries to eat!</h2>
+            <ul>
+                {{#each pastry}}
+                {{#unless devoured}}
+                <li class="pastryItem">{{pastry_name}}</li>
+                <button class="button" id="buttonUpdate" data-id="{{id}}" data-state="{{devoured}}">DEVOUR IT !</button>
+                {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="col">
+            <div class="logo">
+                <h1>THE BAKER'S HUT</h1>
+                <img src="/assets/img/hut.jpg" width="200px" alt="">
+            </div>
+   <section class="section2">
+        <div class="add">
+            <form class="pastryNew">
+                <div class="form-group">
+                    <label for="pastry_add">Add a pastry:</label>
+                    <input type="text" id="pastryInputId" autocomplete="off">
+                </div>
+                <br>
+                <button class="button" id="buttonAdd" type="submit">ADD PASTRY</button>
+            </form>
+        </div>
+    </section>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col" >
+            <h2>Pastries devoured!</h2>
+            <ul>
+                {{#each pastry}}
+                {{#if devoured}}
+                <li class="pastryItem">{{pastry_name}}</li>
+                <button class="button" id="buttonDelete" data-id="{{id}}">DELETE</button>
+                <br>
+                {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+    </section>
+
+ 
