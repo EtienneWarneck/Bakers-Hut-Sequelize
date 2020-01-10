@@ -1,8 +1,11 @@
 var express = require("express");
 
 var app = express();
+var db = require("./models");
 
-var PORT = process.env.PORT || 8080;
+
+var PORT = process.env.PORT || 3306;
+var app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -27,11 +30,13 @@ app.engine(
   app.set("view engine", "handlebars"); 
 
 //Routes
-var routes = require("./controllers/pastries_controller.js");
+var routes = require("./controllers/pastries_controller.js")(app);
 
-app.use(routes);
+// app.use(routes);
 
-//Server
-app.listen(PORT, function () {
-  console.log("SERVER: App now listening at localhost:" + PORT);
+
+db.sequelize.sync().then(function() {
+	app.listen(PORT, function() {
+		console.log("listen on port", PORT);
+	});
 });

@@ -23,6 +23,9 @@
     "express-handlebars": "^3.1.0",
     "express-mysql": "0.0.1",
     "express-mysql-session": "^2.1.0",
-    "mysql": "^2.17.1"
-  }
+    "mysql": "^2.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.3"
+  },
+  "devDependencies": {}
 }

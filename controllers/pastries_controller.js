@@ -1,74 +1,52 @@
-const express = require('express');
-const router = express.Router();
 
-// Import the model (pastry.js) to use its database functions.
-const pastry = require('../models/pastry.js');
+// API ROUTES
 
-router.get("/", function (req, res) {
+var db = require("../models");
 
-    console.log("CONTROLLER root route")
-
-    pastry.all(function (data) { // = orm.SelectAll()
-        // var hbsObject = { pastries: data };
-        // console.log(data);
-
-        res.render('index', { //passing to index.handlebar
-            pastry: data,    //
-            // pageTitle: 'index',
-            // pastriesStyleCSS: true
+module.exports = function (app) {
+    //1 
+    app.get("/api/pastry", function (req, res) {
+        db.Pastry2.findAll({}).then(function (pastries_db) {
+            res.json(pastries_db);
         });
     });
-});
 
-router.post("/api/pastry", function (req, res) {
-
-    console.log("CONTROLLER POST api/pastry route"); //working
-
-    pastry.create(["pastry_name", "devoured"], [req.body.pastry_name, req.body.devoured], function (result) {
-        // (["column DB", "column DB"] , [valueEnteredByUser, 0 ] 
-        //console.log(req.body.pastry_name); // =
-
-        res.json({ id: result.insertId });  // creates an ID to assign new pastry
-
-        console.log(result.insertId);
-        console.log("CONTROLLER POST 2");
-        //Sends a JSON response. This express method sends a response
-        //that is the parameter converted to a JSON string using JSON.stringify
-        //JSON.stringify converts a JavaScript object or value to a JSON string,
-
+    //2
+    app.post("/api/pastry", function (req, res) {
+        db.Pastry2.create({
+            text: req.body.text,
+        }).then(function (pastries_db) {
+            res.json(pastries_db);
+        }).catch(function (err) {
+            res.json(err);
+        });
     });
-});
 
-router.put("/api/pastry/:id", function (req, res) {
-    var condition = "id = " + req.params.id;
-
-    console.log("condition", condition);
-
-    pastry.update(
-        {
-            devoured: req.body.devoured
-        },
-        condition,
-        function (result) {
-            if (result.changedRows === 0) {
-                // If no rows were changed, then the ID must not exist, so 404
-                return res.status(404).end();
+    app.delete("/api/pastry/:id", function (req, res) {
+        db.Pastry2.destroy({
+            where: {
+                id: req.params.id
             }
-            res.status(200).end();
+        }).then(function (pastries_db) {
+            res.json(pastries_db);
+        });
+    });
 
-        }
-    );
-});
-
-    router.delete("/api/pastry/:id", function (req, res) {
+    app.put("/api/pastry/:id", function (req, res) {
         var condition = "id = " + req.params.id;
 
-        pastry.delete(condition,function (result) {
-                res.status(200).end();
-
+        db.Todo.update({
+            text: req.body.text,
+        }, {
+            where: {
+                id: req.body.id
             }
-        );
+        }).then(function (pastries_db) {
+            res.json(pastries_db);
+        }).catch(function (err) {
+            // Whenever a validation or flag fails, an error is thrown
+            // We can "catch" the error to prevent it from being "thrown", which could crash our node app
+            res.json(err);
+        });
     });
-
-    // Export routes for server.js to use.
-    module.exports = router;
+};
